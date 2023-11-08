@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Card } from 'react-bootstrap'
+import { Cart3 } from 'react-bootstrap-icons'
 
 function App () {
   const [products, setProducts] = useState([])
@@ -44,36 +45,70 @@ function App () {
       </header>
       <body>
         <div className='App-body'>
-          <div className='container'>
+          <div
+            className='container-fluid'
+            style={{
+              padding: '2rem'
+            }}
+          >
             <div className='row'>
               <div className='col-9'>
-                <div className='row gx-5'>
+                <div className='row gx-1'>
                   {products.map((product, index) => (
-                    <div className='col'>
+                    <div className='col-6'>
                       <div
-                        className='card'
-                        style={{ width: 18 + 'rem' }}
+                        className='card mb-3'
+                        style={{
+                          maxWidth: '500px',
+                          minHeight: '30vh',
+                          maxHeight: '30vh'
+                        }}
                         key={index}
                       >
-                        <img
-                          src={product.images[0]}
-                          class='card-img-top'
-                          alt='no img'
-                          style={{ height: 100 + 'px' }}
-                        />
-                        <div className='card-body'>
-                          <div className='card-title'>
-                            <h4>{product.title}</h4>
+                        <div className='row g-0'>
+                          <div
+                            className='col-md-4'
+                            style={{ display: 'flex', alignItems: 'center' }}
+                          >
+                            <div className='text-center'>
+                              <img
+                                src={product.images[0]}
+                                class='img-fluid-rounded-start'
+                                alt='no img'
+                                style={{
+                                  maxHeight: '100px',
+                                  minHeight: '100px'
+                                }}
+                              />
+                            </div>
                           </div>
-                          <p>{product.description}</p>
-                          <p>${product.price}</p>
+                          <div className='col-md-8'>
+                            <div className='card-body'>
+                              <div className='card-title'>
+                                <h4>{product.title}</h4>
+                              </div>
+                              <div className='card-text'>
+                                <p>{product.description}</p>
+                                <p>${product.price}</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className='col-3'></div>
+              <div className='col-3'>
+                <ul className='list-group'>
+                  <li className='list-group-item'>An category</li>
+                  <li className='list-group-item'>Second category</li>
+                  <li className='list-group-item'>Third category</li>
+                  <li className='list-group-item'>Fourth category</li>
+                  <li className='list-group-item'>Fifth cactegory</li>
+                </ul>
+                <Cart3 size={128} />
+              </div>
             </div>
           </div>
         </div>
