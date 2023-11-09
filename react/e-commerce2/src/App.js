@@ -4,21 +4,101 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Card } from 'react-bootstrap'
-import { Cart3 } from 'react-bootstrap-icons'
+import { Cart3, Dash, Plus, Shop } from 'react-bootstrap-icons'
 
 function App () {
   const [products, setProducts] = useState([])
 
+  const [cartItems, setCartItems] = useState([])
+
+  // const getDefaultCart = () => {
+  //   let cart = {}
+  //   for (let i = 1; i < products.length; i++) {
+  //     cart[i] = 0
+  //   }
+  //   return cart
+  // }
+
+  // const [cartItems, setCartItems] = useState(getDefaultCart())
+
+  // const ShopContextProvider = props => {
+  //   const [cartItems, setCartItems] = useState(getDefaultCart())
+
+  //   const addToCart = itemId => {
+  //     setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] + 1 }))
+  //   }
+
+  //   const removeFromCart = itemId => {
+  //     setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] - 1 }))
+  //   }
+
+  //   return {props.children}
+  // }
+
+  // const ShopContext = createContext(null)
+  // console.log('products', products)
   useEffect(() => {
     axios
       .get('https://dummyjson.com/products')
       .then(res => {
         setProducts(res.data.products)
+        let tempArray = []
+        res.data.products.forEach(eachData => {
+          let tempObject = {
+            id: eachData.id,
+            amount: 0,
+            details: eachData
+          }
+          tempArray.push(tempObject)
+        })
+        setCartItems(tempArray)
       })
       .catch(error => {
         console.error('Error fetch: ', error)
       })
-  })
+  }, [])
+
+  const incrementProductQuantity = product => {
+    // console.log('productId', productId)
+    // const updatedCartItems = cartItems.map((item, index) => {
+    //   if (index.id === productId) {
+    //     return item + 1
+    //   }
+    // })
+    // let tempArray = [...cartItems]
+    // tempArray.forEach(eachItem => {
+    //   console.log(eachItem)
+    //   if (eachItem.id === product.id) {
+    //   }
+    // })
+    // setCartItems([...cartItems, product])
+    let cloneCart = [...cartItems]
+    cloneCart.forEach(eachCart => {
+      if (eachCart.id === product.id) {
+        // console.log('in')
+        eachCart.amount += 1
+      }
+    })
+
+    setCartItems(cloneCart)
+  }
+  console.log('cartItems', cartItems)
+
+  // const ShopContextProvider = props => {
+  //   const [cartItems, setCartItems] = useState(getDefaultCart())
+
+  //   const addToCart = itemId => {
+  //     setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] + 1 }))
+  //   }
+
+  //   const removeFroCart = itemId => {
+  //     setCartItems(prev => ({ ...prev, [itemId]: prev[itemId] - 1 }))
+  //   }
+
+  //   const contextValue = { cartItems, addToCart, removeFroCart }
+
+  //   return contextValue
+  // }
 
   return (
     <div className='App'>
@@ -29,6 +109,7 @@ function App () {
           integrity='sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM'
           crossorigin='anonymous'
         />
+        <script src='store.js' async></script>
       </head>
       <header className='App-header'>
         <img src={logo} className='App-logo' alt='logo' />
@@ -43,6 +124,7 @@ function App () {
           <a href='#Contacts'>Contacts</a>
         </div>
       </header>
+
       <body>
         <div className='App-body'>
           <div
@@ -60,8 +142,11 @@ function App () {
                         className='card mb-3'
                         style={{
                           maxWidth: '500px',
-                          minHeight: '30vh',
-                          maxHeight: '30vh'
+                          // minHeight: '30vh',
+                          maxHeight: '30vh',
+                          borderWidth: '2px',
+                          width: '90%',
+                          height: '95%'
                         }}
                         key={index}
                       >
@@ -76,20 +161,41 @@ function App () {
                                 class='img-fluid-rounded-start'
                                 alt='no img'
                                 style={{
-                                  maxHeight: '100px',
-                                  minHeight: '100px'
+                                  maxHeight: '25vh',
+                                  minHeight: '25vh',
+                                  maxWidth: '170px',
+                                  minWidth: '170px'
+                                  // width: '90%',
+                                  // height: '50%'
                                 }}
                               />
                             </div>
                           </div>
                           <div className='col-md-8'>
-                            <div className='card-body'>
+                            <div
+                              className='card-body'
+                              // style={{ height: '100%', overflowY: 'auto' }}
+                            >
                               <div className='card-title'>
                                 <h4>{product.title}</h4>
+                                <h6 class='card-subtitle mb-2 text-muted'>
+                                  {product.category}
+                                </h6>
                               </div>
-                              <div className='card-text'>
+                              <div className='module line-clamp'>
                                 <p>{product.description}</p>
                                 <p>${product.price}</p>
+                              </div>
+                              <div className='d-grid'>
+                                <button
+                                  type='button'
+                                  className='btn btn-primary'
+                                  onClick={() =>
+                                    incrementProductQuantity(product)
+                                  }
+                                >
+                                  Add to cart
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -108,6 +214,45 @@ function App () {
                   <li className='list-group-item'>Fifth cactegory</li>
                 </ul>
                 <Cart3 size={128} />
+                <div className='d-grid' style={{ paddingTop: '1rem' }}>
+                  <button type='button' className='btn btn-primary'>
+                    Add to cart
+                  </button>
+                </div>
+                <div className='row' style={{ padding: '1rem 0' }}>
+                  <div className='col-3'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary float-end'
+                    >
+                      <Dash />
+                    </button>
+                  </div>
+                  <div className='col-6'>
+                    <input
+                      className='form-control'
+                      type={'number'}
+                      placeholder='0 item(s)'
+                      name='amount'
+                    ></input>
+                  </div>
+                  <div className='col-3'>
+                    <button
+                      type='button'
+                      className='btn btn-secondary float-start'
+                    >
+                      <Plus />
+                    </button>
+                  </div>
+                </div>
+                <div className='d-grid gap-2'>
+                  <button type='button' className='btn btn-danger'>
+                    Remove
+                  </button>
+                  <button type='button' className='btn btn-danger'>
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
           </div>
