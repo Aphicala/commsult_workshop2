@@ -14,33 +14,38 @@ function MyVerticallyCenteredModal (props) {
     return cartItem && cartItem.amount > 0
   })
 
-  const incrementProductQuantity = product => {
-    let cloneCart = [...cartItems]
-    cloneCart.forEach(eachCart => {
-      if (eachCart.id === product.id) {
-        eachCart.amount += 1
-      }
-    })
+  //   const incrementProductQuantity = product => {
+  //     let cloneCart = [...cartItems]
+  //     cloneCart.forEach(eachCart => {
+  //       if (eachCart.id === product.id) {
+  //         eachCart.amount += 1
+  //       }
+  //     })
 
-    cartItems = cloneCart
+  //     cartItems = cloneCart
+  //   }
+  //   console.log('cartItems', cartItems)
+
+  //   const decrementProductQuantity = product => {
+  //     let cloneCart = [...cartItems]
+  //     cloneCart.forEach(eachCart => {
+  //       if (eachCart.id === product.id) {
+  //         eachCart.amount -= 1
+  //       }
+  //     })
+
+  //     cartItems = cloneCart
+  //   }
+  //   console.log('cartItems', cartItems)
+
+  const quantity = document.getElementsByName('amount')
+
+  quantity.value = cartItems.amount
+
+  const removeProduct = productId => {
+    const updatedCartItems = cartItems.filter(item => item.id !== productId)
+    setCartItems(updatedCartItems)
   }
-  console.log('cartItems', cartItems)
-
-  const decrementProductQuantity = product => {
-    let cloneCart = [...cartItems]
-    cloneCart.forEach(eachCart => {
-      if (eachCart.id === product.id) {
-        eachCart.amount -= 1
-      }
-    })
-
-    cartItems = cloneCart
-  }
-  console.log('cartItems', cartItems)
-
-  //   const quantity = document.getElementsByName('amount')
-
-  //   quantity.value = cartItems.amount
 
   return (
     <Modal
@@ -90,7 +95,7 @@ function MyVerticallyCenteredModal (props) {
                     type={'number'}
                     placeholder='0 item(s)'
                     name='amount'
-                    value={product.amount}
+                    value={quantity.value}
                     // onChange={e => handleAmountChange(e.target.value)}
                   ></input>
                 </div>
@@ -108,7 +113,11 @@ function MyVerticallyCenteredModal (props) {
                 <button type='button' className='btn btn-danger'>
                   ${product.price}
                 </button>
-                <button type='button' className='btn btn-danger'>
+                <button
+                  type='button'
+                  className='btn btn-danger'
+                  onClick={() => removeProduct(item.id)}
+                >
                   Remove
                 </button>
               </div>
